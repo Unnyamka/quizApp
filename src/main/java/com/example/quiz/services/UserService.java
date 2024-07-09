@@ -2,19 +2,25 @@ package com.example.quiz.services;
 
 import com.example.quiz.entity.User;
 import com.example.quiz.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+public class UserService{
 
-    public User save(User user){
-        return userRepository.save(user);
+    private final UserRepository userRepository;
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User findByName(String name){
-        return userRepository.findByName(name);
+    public void registerNewUser(String username, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password); // Хешируем пароль перед сохранением
+        userRepository.save(user);
     }
 }

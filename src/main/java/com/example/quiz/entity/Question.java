@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+
 @Entity
 public class Question {
     @Id
@@ -12,18 +13,19 @@ public class Question {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name="quiz_id")
+    @JoinColumn(name = "quiz_id")
     private Quiz quiz;
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answerList;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers;
+
+    // Getters and setters
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
     }
 
     public String getText() {
@@ -42,11 +44,11 @@ public class Question {
         this.quiz = quiz;
     }
 
-    public List<Answer> getAnswerList() {
-        return answerList;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setAnswerList(List<Answer> answerList) {
-        this.answerList = answerList;
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 }

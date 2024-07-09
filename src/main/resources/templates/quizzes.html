@@ -1,0 +1,21 @@
+<!-- Пример шаблона для списка тестов (admin/quizzes.html) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quizzes</title>
+</head>
+<body>
+<h1>Quizzes</h1>
+<form th:action="@{/admin/quizzes}" th:object="${quiz}" method="post">
+    <input type="text" th:field="*{title}" placeholder="Title"/>
+    <input type="text" th:field="*{description}" placeholder="Description"/>
+    <button type="submit">Create</button>
+</form>
+<ul>
+    <li th:each="quiz : ${quizzes}">
+        <span th:text="${quiz.title}">Quiz Title</span>
+        <span th:text="${quiz.description}">Quiz Description</span>
+    </li>
+</ul>
+</body>
+</html>

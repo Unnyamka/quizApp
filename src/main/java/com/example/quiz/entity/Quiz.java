@@ -3,7 +3,6 @@ package com.example.quiz.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
-
 @Entity
 public class Quiz {
     @Id
@@ -12,16 +11,16 @@ public class Quiz {
     private String title;
     private String description;
 
-    @OneToMany
-    private List<Question> questionList;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions;
+
+    // Getters and setters
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Id
-    public Long getId() {
-        return id;
     }
 
     public String getTitle() {
@@ -40,11 +39,11 @@ public class Quiz {
         this.description = description;
     }
 
-    public List<Question> getQuestionList() {
-        return questionList;
+    public List<Question> getQuestions() {
+        return questions;
     }
 
-    public void setQuestionList(List<Question> questionList) {
-        this.questionList = questionList;
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
