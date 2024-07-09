@@ -2,6 +2,7 @@ package com.example.quiz.services;
 
 import com.example.quiz.entity.User;
 import com.example.quiz.repositories.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,4 +26,10 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public void save(User user){
+        userRepository.save(user);
+    }
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.quiz.security;
 
-import com.example.quiz.entity.User;
 import com.example.quiz.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,50 +22,73 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Collections;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserService userService;
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
+//    private final UserService userService;
+//    public SecurityConfig(UserService userService) {
+//        this.userService = userService;
+//    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return username -> {
+//            User user = userService.findByUsername(username);
+//            if (user != null) {
+//                return new org.springframework.security.core.userdetails.User(
+//                        user.getUsername(),
+//                        user.getPassword(),
+//                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
+//                );
+//            } else {
+//                throw new UsernameNotFoundException("User not found");
+//            }
+//        };
+//    }
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-            User user = userService.findByUsername(username);
-            if (user != null) {
-                return new org.springframework.security.core.userdetails.User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
-                );
-            } else {
-                throw new UsernameNotFoundException("User not found");
-            }
-        };
+        UserDetails user = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user2 = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("user"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, user2);
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        logger.info("Fuck my ass");
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                                .requestMatchers(new AntPathRequestMatcher("/user/**")).hasRole("USER")
-                                .requestMatchers(new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/register")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/users")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/perform_login"),
+                                        new AntPathRequestMatcher("/register"), new AntPathRequestMatcher("/logout")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/quizzes", true)
+                                .loginProcessingUrl("/perform_login")
+                                .defaultSuccessUrl("/users", true)
                                 .failureUrl("/login?error=true")
                                 .permitAll()
                 )
                 .logout(logout ->
                         logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                                .logoutSuccessUrl("/login?logout=true")
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login")
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
                                 .permitAll()
                 );
         return http.build();

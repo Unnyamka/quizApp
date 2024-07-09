@@ -1,26 +1,26 @@
 package com.example.quiz.entity;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.management.relation.Role;
-import java.util.Collection;
 
 @Entity
 @Table(name = "users")
 public class User{
 
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="id_Sequence")
     private Long id;
     private String username;
     private String password;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private String role; //Admin - User
+
 
     public String getRole() {
         return role;
@@ -28,10 +28,6 @@ public class User{
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public User() {
-
     }
 
     public void setId(Long id) {

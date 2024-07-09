@@ -5,6 +5,12 @@
   <title>User List</title>
 </head>
 <body>
+
+<!-- Кнопка выхода из аккаунта -->
+<form id="logoutForm" action="/logout" method="post">
+  <button type="submit">Logout</button>
+</form>
+
 <h2>User List</h2>
 <table border="1">
   <thead>
@@ -12,6 +18,7 @@
     <th>ID</th>
     <th>Username</th>
     <th>Password</th>
+    <th>Role</th>
   </tr>
   </thead>
   <tbody>
