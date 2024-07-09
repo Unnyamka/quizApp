@@ -14,8 +14,19 @@ public class User {
     private String name;
     private String password;
     private String role; //Admin - User
+
+    public User() {
+
+    }
+
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User(String name, String password, String role) {
+        this.name = name;
+        this.password = password;
+        this.role = role;
     }
 
     @Id
