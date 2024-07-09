@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping("/questions")
     public String getQuestions(Model model){
-        model.addAttribute("questings", questionService.findAlL());
+        model.addAttribute("questions", questionService.findAlL());
         return "admin/questions";
     }
 
