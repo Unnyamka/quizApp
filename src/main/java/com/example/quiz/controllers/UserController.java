@@ -1,12 +1,15 @@
 package com.example.quiz.controllers;
 
 import com.example.quiz.entity.Quiz;
+import com.example.quiz.entity.User;
+import com.example.quiz.repositories.UserRepository;
 import com.example.quiz.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -33,4 +36,7 @@ public class UserController {
         //Обработка ответов и оценка результатов
         return "redirect:/user/quizzes";
     }
+
+
+
 }
