@@ -4,8 +4,11 @@ import com.example.quiz.entity.User;
 import com.example.quiz.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -29,42 +32,29 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    private final UserService userService;
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> {
-            User user = userService.findByUsername(username);
-            if (user != null) {
-                return new org.springframework.security.core.userdetails.User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
-                );
-            } else {
-                throw new UsernameNotFoundException("User not found");
-            }
-        };
-    }
-
+//    private final UserService userService;
+//    public SecurityConfig(UserService userService) {
+//        this.userService = userService;
+//    }
 //    @Bean
 //    public UserDetailsService userDetailsService() {
-//        UserDetails user = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        UserDetails user2 = User.builder()
-//                .username("user")
-//                .password(passwordEncoder().encode("user"))
-//                .roles("USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user, user2);
+//        return username -> {
+//            User user = userService.findByUsername(username);
+//            if (user != null) {
+//                return new org.springframework.security.core.userdetails.User(
+//                        user.getUsername(),
+//                        user.getPassword(),
+//                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
+//                );
+//            } else {
+//                throw new UsernameNotFoundException("User not found");
+//            }
+//        };
 //    }
+
+
+    @Autowired
+    private CustomUserDetailService userDetailsService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -93,8 +83,13 @@ public class SecurityConfig {
         return http.build();
     }
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//    }
 
 }

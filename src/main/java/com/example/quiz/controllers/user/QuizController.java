@@ -7,6 +7,11 @@ import com.example.quiz.services.AnswerService;
 import com.example.quiz.services.QuestionService;
 import com.example.quiz.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +36,12 @@ public class QuizController {
     private AnswerService answerService;
 
     @GetMapping("/quizzes")
-    public String listQuizzes(Model model) {
+    public String listQuizzes(Model model, @AuthenticationPrincipal User user) {
+       String currentPrincipalName =  user.getUsername();
+       Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+
+        model.addAttribute("username", currentPrincipalName);
+        model.addAttribute("roles", authorities);
         model.addAttribute("quizzes", quizService.findAll());
         return "quizzes";
     }

@@ -29,7 +29,7 @@ public class AdminQuizController {
     @PostMapping("/addQuiz")
     public String addQuizSubmit(@ModelAttribute("quiz") Quiz quiz) {
         quizService.addQuiz(quiz); // Предположим, что у вас есть метод в сервисе для добавления викторины
-        return "redirect:/admin/quizzes";
+        return "redirect:/quizzes";
     }
 
     // Страница редактирования существующей викторины
