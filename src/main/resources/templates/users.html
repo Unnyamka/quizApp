@@ -7,10 +7,9 @@
 <body>
 
 <!-- Кнопка выхода из аккаунта -->
-<form id="logoutForm" action="/logout" method="post">
+<form th:action="@{/logout}" method="post">
   <button type="submit">Logout</button>
 </form>
-
 <h2>User List</h2>
 <table border="1">
   <thead>

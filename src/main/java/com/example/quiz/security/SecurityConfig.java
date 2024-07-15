@@ -1,5 +1,6 @@
 package com.example.quiz.security;
 
+import com.example.quiz.entity.User;
 import com.example.quiz.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,45 +29,44 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-//    private final UserService userService;
-//    public SecurityConfig(UserService userService) {
-//        this.userService = userService;
-//    }
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        return username -> {
-//            User user = userService.findByUsername(username);
-//            if (user != null) {
-//                return new org.springframework.security.core.userdetails.User(
-//                        user.getUsername(),
-//                        user.getPassword(),
-//                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
-//                );
-//            } else {
-//                throw new UsernameNotFoundException("User not found");
-//            }
-//        };
-//    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user2 = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, user2);
+    private final UserService userService;
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
     }
     @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            User user = userService.findByUsername(username);
+            if (user != null) {
+                return new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
+                );
+            } else {
+                throw new UsernameNotFoundException("User not found");
+            }
+        };
+    }
+
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails user = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails user2 = User.builder()
+//                .username("user")
+//                .password(passwordEncoder().encode("user"))
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user, user2);
+//    }
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        logger.info("Fuck my ass");
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -83,12 +82,18 @@ public class SecurityConfig {
                                 .failureUrl("/login?error=true")
                                 .permitAll()
                 )
+//                .logout(logout ->
+//                        logout
+//                                .logoutUrl("/logout")
+//                                .logoutSuccessUrl("/login")
+//                                .invalidateHttpSession(true)
+//                                .deleteCookies("JSESSIONID")
+//                                .permitAll()
+//                );
                 .logout(logout ->
                         logout
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/login")
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
+                                .logoutSuccessUrl("/login?logout")
                                 .permitAll()
                 );
         return http.build();

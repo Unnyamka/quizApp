@@ -49,5 +49,8 @@
 <div class="register-button">
     <a href="/register"><button type="button">Регистрация</button></a>
 </div>
+<div th:if="${param.logout}">
+    <p>You have been logged out.</p>
+</div>
 </body>
 </html>
