@@ -1,4 +1,4 @@
-package com.example.quiz.controllers;
+package com.example.quiz.controllers.user;
 
 
 import jakarta.servlet.RequestDispatcher;

@@ -14,7 +14,7 @@ public class QuizService {
     @Autowired
     private QuizRepository quizRepository;
 
-    public Quiz save(Quiz quiz){
+    public Quiz addQuiz(Quiz quiz){
         return quizRepository.save(quiz);
     }
 
@@ -25,4 +25,17 @@ public class QuizService {
     public Quiz findById(Long id) {
         return quizRepository.findById(id).orElse(null);
     }
+
+    public void updateQuiz(Quiz quiz){
+        if (quizRepository.existsById(quiz.getId())) {
+            quizRepository.save(quiz); // Если викторина с таким ID существует, она будет обновлена
+        } else {
+            throw new RuntimeException("Quiz not found");
+        }
+    }
+
+    public void deleteQuiz(Long id) {
+        quizRepository.deleteById(id);
+    }
+
 }

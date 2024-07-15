@@ -6,11 +6,14 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div>
-  <form th:action="@{/logout}" method="post">
-    <button type="submit" class="logout-button">Logout</button>
-  </form>
-</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Quiz Application</a>
+  <div class="collapse navbar-collapse justify-content-end">
+    <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post">
+      <button class="btn btn-outline-danger my-2 my-sm-0 logout-button" type="submit">Logout</button>
+    </form>
+  </div>
+</nav>
 
 <div class="container mt-5">
   <h1 th:text="${quiz.title}"></h1>

@@ -6,50 +6,127 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            color: blue;
+            background-color: #f0f0f0;
+            color: #333;
         }
 
         h2 {
             text-align: center;
+            margin-top: 50px;
         }
 
         form {
             width: 300px;
             margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        div {
+        label {
+            display: block;
             margin-bottom: 10px;
         }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
         .register-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-button a {
+            text-decoration: none;
+        }
+
+        .register-button button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .register-button button:hover {
+            background-color: #0056b3;
+        }
+        .fade-out {
+            animation: fadeOut 3s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        #logoutMessage{
+            text-align: center;
         }
     </style>
+    <script th:inline="javascript">
+        /* JavaScript для автоматического добавления класса при загрузке */
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var logoutMessage = document.getElementById('logoutMessage');
+                if (logoutMessage) {
+                    logoutMessage.classList.add('fade-out');
+                }
+            }, 1000); // Добавить класс через 3 секунды (3000 миллисекунд)
+        });
+    </script>
 </head>
 <body>
 <h2>Login</h2>
 <form th:action="@{/perform_login}" method="post">
     <div>
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" />
+        <input type="text" id="username" name="username" required />
     </div>
     <div>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" />
+        <input type="password" id="password" name="password" required />
     </div>
     <div>
         <button type="submit">Login</button>
     </div>
-    <div th:if="${param.error}">
-        <p>Invalid username or password</p>
+    <div th:if="${param.error}" class="error-message">
+        Invalid username or password
     </div>
 </form>
 <div class="register-button">
-    <a href="/register"><button type="button">Регистрация</button></a>
+    <a href="/register"><button type="button">Register</button></a>
 </div>
-<div th:if="${param.logout}">
+<div id="logoutMessage" th:if="${param.logout}">
     <p>You have been logged out.</p>
 </div>
 </body>
