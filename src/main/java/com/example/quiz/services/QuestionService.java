@@ -20,4 +20,8 @@ public class QuestionService {
     public List<Question> findAlL(){
         return questionRepositroy.findAll();
     }
+
+    public List<Question> findByQuizId(Long quizId) {
+        return questionRepositroy.findByQuizId(quizId);
+    }
 }

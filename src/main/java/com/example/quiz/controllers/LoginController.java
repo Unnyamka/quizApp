@@ -37,16 +37,6 @@ public class LoginController {
         model.addAttribute("users", users);
         return "users"; // Возвращает имя HTML-шаблона (например, users.html)
     }
-
-
-    @Autowired
-    private QuizRepository quizRepository;
-    @GetMapping("/quizzes")
-    public String getAllQuizzes(Model model) {
-        List<Quiz> quizzes = quizRepository.findAll();
-        model.addAttribute("quizzes", quizzes);
-        return "quizzes"; // Возвращает имя HTML-шаблона (например, users.html)
-    }
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @PostMapping("/perform_login")

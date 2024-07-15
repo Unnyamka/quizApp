@@ -1,21 +1,34 @@
-<!-- Пример шаблона для списка тестов (admin/quizzes.html) -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Quizzes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Quizzes</h1>
-<form th:action="@{/quizzes}" th:object="${quiz}" method="post">
-    <input type="text" th:field="*{title}" placeholder="Title"/>
-    <input type="text" th:field="*{description}" placeholder="Description"/>
-    <button type="submit">Create</button>
-</form>
-<ul>
-    <li th:each="quiz : ${quizzes}">
-        <span th:text="${quiz.title}">Quiz Title</span>
-        <span th:text="${quiz.description}">Quiz Description</span>
-    </li>
-</ul>
+<div class="container mt-5">
+    <h1 class="mb-4">Quizzes</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="quiz : ${quizzes}">
+            <td th:text="${quiz.title}"></td>
+            <td th:text="${quiz.description}"></td>
+            <td>
+                <a class="btn btn-primary" th:href="@{/quiz/{id}(id=${quiz.id})}">View</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

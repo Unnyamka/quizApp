@@ -19,4 +19,12 @@ public class AnswerService {
     public List<Answer> findAll(){
         return answerRepository.findAll();
     }
+
+    public List<Answer> findByQuestionId(Long questionId) {
+        return answerRepository.findByQuestionId(questionId);
+    }
+
+    public List<Answer> findCorrectAnswersByQuestionId(Long questionId) {
+        return answerRepository.findByQuestionIdAndCorrectTrue(questionId);
+    }
 }

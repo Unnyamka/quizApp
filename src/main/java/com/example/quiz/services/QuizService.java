@@ -22,7 +22,7 @@ public class QuizService {
         return quizRepository.findAll();
     }
 
-    public Optional<Quiz> findById(Long id){
-        return quizRepository.findById(id);
+    public Quiz findById(Long id) {
+        return quizRepository.findById(id).orElse(null);
     }
 }
