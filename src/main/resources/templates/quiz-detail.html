@@ -6,6 +6,12 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<div>
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout-button">Logout</button>
+  </form>
+</div>
+
 <div class="container mt-5">
   <h1 th:text="${quiz.title}"></h1>
   <p th:text="${quiz.description}"></p>

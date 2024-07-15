@@ -35,6 +35,12 @@ public class QuizController {
         return "quizzes";
     }
 
+    @GetMapping("admin/quizzes")
+    public String listAdminQuizzes(Model model) {
+        model.addAttribute("quizzes", quizService.findAll());
+        return "admin/quizzes";
+    }
+
     @GetMapping("/quiz/{id}")
     public String viewQuiz(@PathVariable("id") Long id, Model model) {
         Quiz quiz = quizService.findById(id);

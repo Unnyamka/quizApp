@@ -72,6 +72,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(new AntPathRequestMatcher("/login"), new AntPathRequestMatcher("/perform_login"),
                                         new AntPathRequestMatcher("/register"), new AntPathRequestMatcher("/logout")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -82,14 +83,7 @@ public class SecurityConfig {
                                 .failureUrl("/login?error=true")
                                 .permitAll()
                 )
-//                .logout(logout ->
-//                        logout
-//                                .logoutUrl("/logout")
-//                                .logoutSuccessUrl("/login")
-//                                .invalidateHttpSession(true)
-//                                .deleteCookies("JSESSIONID")
-//                                .permitAll()
-//                );
+
                 .logout(logout ->
                         logout
                                 .logoutUrl("/logout")
